@@ -28,6 +28,36 @@ class TurnAction(Enum):
     STAND = "Stand"
 
 
+def possible_cards(cards: list[str]) -> list[list[int]]:
+    """
+    Returns all numbers that can be made with the cards in the hand.
+    """
+    possible_numbers = []
+    for card in cards:
+        if card[0] == "A":
+            # Ace can be 1 or 11
+            possible_numbers.append([1, 11])
+        elif card[0] in ["J", "Q", "K"]:
+            possible_numbers.append([10])
+        else:
+            # All other cards are their number value
+            possible_numbers.append([int(card[0])])
+    return possible_numbers
+
+
+def max_hand_value(possible_numbers: list[list[int]]) -> int:
+    """
+    Calculate the maximum hand value
+    """
+    max_hand = 0
+    for hand in possible_numbers:
+        for number in hand:
+            if max_hand + number > 21:
+                continue
+            max_hand += number
+    return max_hand
+
+
 def take_turn(blackjack_turn: BlackjackTurn) -> TurnAction:
     """
     Receives all data needed to decide what action to take,
@@ -35,4 +65,13 @@ def take_turn(blackjack_turn: BlackjackTurn) -> TurnAction:
     :param blackjack_turn:
     :return:
     """
-    return TurnAction.STAND
+
+    cards = possible_cards(blackjack_turn.current_hand)
+    max_hand = max_hand_value(cards)
+
+    if max_hand > int(blackjack_turn.dealer_stop):
+        # If the players max hand is greater than the dealers stop value,
+        # the player should stand.
+        return TurnAction.STAND
+
+    return TurnAction.HIT
