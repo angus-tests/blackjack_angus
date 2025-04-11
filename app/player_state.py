@@ -7,6 +7,7 @@ class PlayerState:
 
     Maintain player's nickname and player_id for turns and connection checks
     """
+
     def __init__(self):
         self.nickname = SETTINGS.player_nickname
         self.player_id = ""

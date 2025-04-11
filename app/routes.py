@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from app.dependencies import get_player_state
-from app.logic import take_turn
-from app.models.blackjack_models import ManualConnect, BlackjackTurn
+from app.logic import take_turn, make_bet
+from app.models.blackjack_models import ManualConnect, BlackjackTurn, BlackjackBet
 from app.player_state import PlayerState
 
 router = APIRouter()
@@ -28,7 +28,10 @@ async def connect(
     :return:
     """
     player_state.set_player_id(manual_connect.player_id)
-    return {"nickname": player_state.get_player_nickname(), "player_id": manual_connect.player_id}
+    return {
+        "nickname": player_state.get_player_nickname(),
+        "player_id": player_state.get_player_id(),
+    }
 
 
 @router.get("/connection-check")
@@ -40,6 +43,16 @@ async def connection_check(player_state: PlayerState = Depends(get_player_state)
     """
     print("Received connection check")
     return {"player_id": player_state.get_player_id()}
+
+
+@router.post("/bet")
+async def bet(blackjack_bet: BlackjackBet):
+    """
+    Endpoint for receiving players current points and returning a bet amount,
+    disqualified if bet amount is larger than current points.
+    """
+    bet_amount = make_bet(blackjack_bet)
+    return {"bet_amount": bet_amount}
 
 
 @router.post("/turn")
