@@ -86,6 +86,6 @@ def make_bet(blackjack_bet: BlackjackBet) -> int:
     :param blackjack_bet:
     :return:
     """
-    # Always bet all points
-    return blackjack_bet.current_points
+    # Always bet 1
+    return 1
 
