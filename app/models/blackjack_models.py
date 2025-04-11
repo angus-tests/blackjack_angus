@@ -14,6 +14,8 @@ class BlackjackTurn(BaseModel):
 class BlackjackBet(BaseModel):
     player_id: str
     current_points: int
+    played_cards: list[str]
+    deck_amount: str
 
 
 class ManualConnect(BaseModel):
