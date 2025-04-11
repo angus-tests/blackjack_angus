@@ -17,7 +17,7 @@ async def root():
     return {"message": "Hello from blackjack player"}
 
 
-@router.get("/connect")
+@router.post("/connect")
 async def connect(
     manual_connect: ManualConnect, player_state: PlayerState = Depends(get_player_state)
 ):

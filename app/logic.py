@@ -41,9 +41,9 @@ def possible_cards(cards: list[str]) -> list[list[int]]:
             possible_numbers.append([10])
         else:
             # All other cards are their number value
-            possible_numbers.append(int(
+            possible_numbers.append([int(
                 card[:-1]
-            ))
+            )])
     return possible_numbers
 
 
